@@ -3,12 +3,14 @@
 
 # But not these files...
 !*.py
+!*.glsl
 
 
 # ...even if they are in subdirectories
 !interface/
 !core/
 !gui/
+!shaders/
 
 
 # don't ignore special files

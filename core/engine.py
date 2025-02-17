@@ -5,13 +5,13 @@ import imgui
 from imgui.integrations.glfw import GlfwRenderer
 
 import core.globals
-from gui_manager import *
-from shader import *
+from gui_manager import GuiManager
+from shader import Shader
 from callbacks import *
 from gui import *
-from load_object import *
+from load_object import load_object_from_file
 
-from objects.grid import GridMesh
+from objects.grid import Grid
 
 
 
@@ -26,7 +26,7 @@ class Engine:
     def init(self):
         if not glfw.init():
             return -1
-        self.window = glfw.create_window(core.globals.width, core.globals.height, "3D Trajectory Simulation", None, None)
+        self.window = glfw.create_window(core.globals.width, core.globals.height, "Py3DEngine", None, None)
         if not self.window:
             glfw.terminate()
             return -1
@@ -35,10 +35,10 @@ class Engine:
         glEnable(GL_DEPTH_TEST)
 
         # Create Shader Program (can be created after the window only)
-        self.shader = Shader("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl")
+        self.shader = Shader("shaders/basic_shader.glsl", "shaders/basic_fragment.glsl")
         core.globals.shader = self.shader
-        print(self.shader)
-        print(core.globals.shader)
+        # print(self.shader)
+        # print(core.globals.shader)
 
         imgui.create_context()
         self.impl = GlfwRenderer(self.window)
@@ -58,7 +58,7 @@ class Engine:
         core.globals.gui_manager.add_gui(GuiMenuBar(core.globals.gui_manager))
         core.globals.gui_manager.add_gui(GuiLightsSettings("Window 1"))
         
-        self.grid = GridMesh()
+        self.grid = Grid()
         
         return 0
 
@@ -122,8 +122,11 @@ class Engine:
                 self.shader.set_uniform3fv("sunlight.direction", glm.normalize(glm.vec3(-1.0, -1.0, -1.0)))
                 self.shader.set_uniform3fv("sunlight.color", glm.vec3(1.0, 1.0, 1.0))
             
-            
-            self.grid.render(shader)
+            # glDisable(GL_DEPTH_TEST)
+            # glDisable(GL_BLEND)
+            self.grid.render(self.shader)
+            # glEnable(GL_DEPTH_TEST)
+            # glEnable(GL_BLEND)
             
             # render_scene()
             core.globals.scene_manager.update_all()  # Update all scene objects

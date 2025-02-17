@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from core.shader import Shader
 
 class IScene: #(ABC):
     def __init(self):
@@ -15,6 +16,10 @@ class IScene: #(ABC):
 
     # @abstractmethod
     def render(self):
+        """Render the scene to the screen."""
+        pass
+
+    def render(self, shader: Shader):
         """Render the scene to the screen."""
         pass
 
