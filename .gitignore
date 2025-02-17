@@ -1,0 +1,16 @@
+# Ignore everything
+*
+
+# But not these files...
+!*.py
+
+
+# ...even if they are in subdirectories
+!interface/
+!core/
+!gui/
+
+
+# don't ignore special files
+!requirements.txt
+!.gitignore
