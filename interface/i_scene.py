@@ -14,12 +14,7 @@ class IScene: #(ABC):
         """Update the scene logic (e.g., physics, animations)."""
         pass
 
-    # @abstractmethod
-    def render(self):
-        """Render the scene to the screen."""
-        pass
-
-    def render(self, shader: Shader):
+    def render(self, shader: Shader = None):
         """Render the scene to the screen."""
         pass
 

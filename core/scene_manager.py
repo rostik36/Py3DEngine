@@ -3,7 +3,7 @@ from interface.i_scene import IScene
 
 class SceneManager:
     def __init__(self):
-        self.scenes = []
+        self.scenes:list[IScene] = []
 
     def add_scene(self, scene):
         if isinstance(scene, IScene):

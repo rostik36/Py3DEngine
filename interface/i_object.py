@@ -29,11 +29,7 @@ class IObject:
         """Method to be implemented by subclasses."""
         raise NotImplementedError
 
-    def render(self):
-        """Method to be implemented by subclasses."""
-        raise NotImplementedError
-
-    def render(self, shader: Shader):
+    def render(self, shader: Shader=None):
         """Method to be implemented by subclasses."""
         raise NotImplementedError
 

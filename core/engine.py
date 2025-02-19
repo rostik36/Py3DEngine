@@ -32,8 +32,14 @@ class Engine:
             return -1
 
         glfw.make_context_current(self.window)
-        glEnable(GL_DEPTH_TEST)
-
+        # ✅ Ensure correct OpenGL settings
+        glEnable(GL_DEPTH_TEST)  # ✅ Enable depth test
+        glDepthFunc(GL_LESS)     # ✅ Accept fragments closer to the camera
+        # glEnable(GL_CULL_FACE)   # ✅ Cull back faces (performance boost)
+        # glCullFace(GL_BACK)
+        glDisable(GL_CULL_FACE)  # Disable face culling for testing
+        glDepthMask(GL_TRUE)     # ✅ Ensure depth writing is enabled
+        
         # Create Shader Program (can be created after the window only)
         self.shader = Shader("shaders/basic_shader.glsl", "shaders/basic_fragment.glsl")
         core.globals.shader = self.shader

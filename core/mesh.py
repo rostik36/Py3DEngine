@@ -4,10 +4,13 @@ from core.shader import Shader
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+
+# TODO: may add texture coordinates  to this class and may be create interface for mesh
+
 class Mesh:
     """Represents a 3D mesh with vertices and faces."""
     
-    def __init__(self, vertices=None, indices=None, draw_mode=GL_TRIANGLES):
+    def __init__(self, vertices=None, indices=None, position=[0,0,0], draw_mode=GL_TRIANGLES):
         """
         Initialize a mesh.
         :param vertices: List of (x, y, z) tuples representing vertex positions.
@@ -19,7 +22,9 @@ class Mesh:
         self.VBO = glGenBuffers(1)
         self.EBO = glGenBuffers(1)
         
-        self.model_matrix = glm.mat4(1.0)
+        self.position = glm.vec3(position)
+        self.model_matrix = glm.translate(glm.mat4(1.0), self.position)
+        # self.model_matrix = glm.mat4(1.0)
         self.draw_mode = draw_mode  # Allow different draw modes (triangles or lines)
         self.length = len(self.indices) if draw_mode==GL_TRIANGLES else (len(self.vertices) // 6)
         
@@ -33,18 +38,31 @@ class Mesh:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.EBO)
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, self.indices.nbytes, self.indices, GL_STATIC_DRAW)
 
-        # Position attribute
+        # Position attribute (3 floats)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * 4, ctypes.c_void_p(0))
         glEnableVertexAttribArray(0)
 
-        # Normal attribute
+        # Normal attribute (3 floats)
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * 4, ctypes.c_void_p(12))
         glEnableVertexAttribArray(1)
 
 
-    def render(self):
-        """Render the mesh using OpenGL."""
-        pass
+        # # Position attribute
+        # glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * 4, ctypes.c_void_p(0))
+        # glEnableVertexAttribArray(0)
+
+        # # Normal attribute
+        # glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * 4, ctypes.c_void_p(12))
+        # glEnableVertexAttribArray(1)
+
+    def update_position(self, new_position):
+        """Update the mesh position in the scene."""
+        self.position = glm.vec3(new_position)
+        self.model_matrix = glm.translate(glm.mat4(1.0), self.position)
+
+    # def render(self):
+    #     """Render the mesh using OpenGL."""
+    #     pass
 
     def render(self, shader: Shader, material: dict):
         """Render the object using the provided shader"""
