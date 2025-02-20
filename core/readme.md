@@ -61,3 +61,103 @@ Explanation of Parameters
 3 * 4 = 12 bytes
 ```
 - The normal values **start immediately after** the position values.
+
+
+
+
+
+
+
+
+### **Vertex Shader and Fragment Shader: Purpose and Execution Order**
+
+In the graphics pipeline, **shaders** are small programs that run on the GPU to process and render 3D objects. The two most fundamental types of shaders in modern OpenGL (and Vulkan, Direct3D, etc.) are the **Vertex Shader** and the **Fragment Shader**. Each serves a specific purpose in the rendering process.
+
+---
+
+### **1. Vertex Shader**
+#### **Purpose:**
+- Processes each **vertex** of a 3D model.
+- Transforms the vertex **position** from **object space** to **screen space**.
+- Computes and passes data (such as color, normal vectors, texture coordinates, etc.) to the **Fragment Shader**.
+
+#### **Execution Order:**
+1. The **vertex shader** runs **once per vertex** in a 3D model.
+2. It calculates the **position** of each vertex in clip space (using the **MVP matrix**).
+3. It passes interpolated data (like color, texture coordinates, normals) to the next stage.
+
+#### **Example of a Vertex Shader in GLSL:**
+```glsl
+#version 330 core
+layout(location = 0) in vec3 position;  // Vertex position (input)
+layout(location = 1) in vec3 normal;    // Normal vector (input)
+layout(location = 2) in vec2 texCoord;  // Texture coordinates (input)
+
+uniform mat4 modelViewProjection; // MVP matrix
+
+out vec2 fragTexCoord;  // Pass to Fragment Shader
+out vec3 fragNormal;    // Pass to Fragment Shader
+
+void main() {
+    gl_Position = modelViewProjection * vec4(position, 1.0);
+    fragTexCoord = texCoord;
+    fragNormal = normal;
+}
+```
+
+---
+
+### **2. Fragment Shader (Pixel Shader)**
+#### **Purpose:**
+- Runs for each **pixel** that will be drawn on the screen.
+- Determines the **final color** of the pixel by using interpolated data from the **Vertex Shader**.
+- Applies **textures, lighting, shading, and effects**.
+
+#### **Execution Order:**
+1. Runs **once per fragment (potential pixel)** after rasterization.
+2. Uses interpolated values from the **Vertex Shader** to compute the final color.
+3. Outputs the **final color** of the pixel.
+
+#### **Example of a Fragment Shader in GLSL:**
+```glsl
+#version 330 core
+in vec2 fragTexCoord;  // Received from Vertex Shader
+in vec3 fragNormal;    // Received from Vertex Shader
+
+out vec4 FragColor;    // Output color
+
+uniform sampler2D texture1;  // Texture
+
+void main() {
+    vec4 texColor = texture(texture1, fragTexCoord);
+    FragColor = texColor; // Output final color
+}
+```
+
+---
+
+### **Execution Order in the Pipeline:**
+1. **Vertex Shader:** Runs for each vertex.
+2. **Primitive Assembly & Clipping:** Vertices are grouped into **triangles**, **clipped**, and prepared for rasterization.
+3. **Rasterization:** Triangles are converted into **fragments** (potential pixels).
+4. **Fragment Shader:** Runs for each fragment.
+5. **Depth & Blending Tests:** Determines if the fragment is visible or should be discarded.
+
+---
+
+### **Key Differences:**
+| Feature           | Vertex Shader | Fragment Shader |
+|------------------|--------------|----------------|
+| Runs per...      | Vertex       | Fragment (Pixel) |
+| Purpose         | Transforms vertex positions and passes data | Computes final pixel color |
+| Input          | Object vertices | Interpolated data from vertex shader |
+| Output         | Transformed position & data | Final pixel color |
+
+---
+
+### **Summary:**
+- The **vertex shader** processes each **vertex** and calculates positions.
+- The **fragment shader** processes each **pixel** and determines the final color.
+- The **vertex shader runs first**, followed by rasterization, and then the **fragment shader runs**.
+
+Let me know if you need more details! 🚀

@@ -1,5 +1,5 @@
-from settings import *
-from frustum import Frustum
+from globals import *
+# from core.view_frustum import Frustum
 
 
 class Camera:
@@ -15,7 +15,39 @@ class Camera:
         self.m_proj = glm.perspective(V_FOV, ASPECT_RATIO, NEAR, FAR)
         self.m_view = glm.mat4()
 
-        self.frustum = Frustum(self)
+        # self.frustum = Frustum(self)
+
+
+# Calculate camera vectors once per frame
+            # front, right = calculate_camera_vectors()
+
+            # # Update camera position using precomputed vectors
+            # update_camera_position(front, right)
+
+            # # Update view matrix dynamically
+            # target = core.globals.camera_pos + front  # Update target position
+            # # Update the view matrix
+            # core.globals.view_matrix = glm.lookAt(
+            #     core.globals.camera_pos,  # Camera position
+            #     target,  # Where the camera is looking
+            #     glm.vec3(0, 1, 0)  # Up vector (Y-axis)
+            # )
+
+
+# Function to recalculate the camera vectors
+# def calculate_camera_vectors():
+#     """Calculates front and right vectors based on yaw and pitch."""
+#     front = glm.vec3(
+#         math.cos(math.radians(core.globals.yaw)) * math.cos(math.radians(core.globals.pitch)),
+#         math.sin(math.radians(core.globals.pitch)),
+#         math.sin(math.radians(core.globals.yaw)) * math.cos(math.radians(core.globals.pitch))
+#     )
+#     front = glm.normalize(front)  # Normalize the front vector
+
+#     up = glm.vec3(0.0, 1.0, 0.0)
+#     right = glm.normalize(glm.cross(front, up))  # Right vector
+
+#     return front, right
 
     def update(self):
         self.update_vectors()

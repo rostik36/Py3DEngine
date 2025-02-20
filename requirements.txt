@@ -5,3 +5,4 @@ pyglm==2.8.0
 Pygments==2.19.1
 PyOpenGL==3.1.9
 PyOpenGL-accelerate==3.1.9
+imgui==2.0.0
