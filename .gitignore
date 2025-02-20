@@ -5,6 +5,7 @@
 !*.py
 !*.glsl
 !*.md
+!*.drawio
 
 
 # ...even if they are in subdirectories
@@ -12,6 +13,7 @@
 !core/
 !gui/
 !shaders/
+!diagrams/
 
 
 # don't ignore special files
